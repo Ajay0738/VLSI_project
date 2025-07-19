@@ -1,0 +1,36 @@
+module tb_binary_to_gray_counter;
+    reg clk;
+    reg reset;
+    wire [7:0] gray_code;
+
+    // Instantiate the top module
+    binary_to_gray_counter uut (
+        .clk(clk),
+        .reset(reset),
+        .gray_code(gray_code)
+    );
+  // Clock generation
+    always begin
+        #5 clk = ~clk;  // Generate a clock with period 10ns
+    end
+
+    // Testbench logic
+    initial begin
+        // Initialize signals
+        clk = 0;
+        reset = 0;
+
+        // Apply reset
+        reset = 1;
+        #10;
+        reset = 0;
+
+        // Run the simulation for some time to see the behavior
+        #200;
+// End simulation
+        $finish;
+    // Monitor the output
+    initial begin
+        $monitor("At time %t, Gray code = %b", $time, gray_code);
+    End
+endmodule
