@@ -1,0 +1,23 @@
+module UniversalShiftRegister (
+    input clk,
+    input rst,
+    input SI,          // Shift input for shift right or left
+    input [7:0] D,     // Parallel load input
+    input [1:0] S,     // Select lines to choose the operation mode
+    output reg [7:0] Q // 8-bit output
+);
+  // Behavioral modeling: Use always block for shift operations
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            Q <= 8'b00000000; // Reset state
+        end else begin
+            case(S)
+                2'b00: Q <= Q;               // Hold
+                2'b01: Q <= {SI, Q[7:1]};    // Shift left
+                2'b10: Q <= {Q[6:0], SI};    // Shift right
+                2'b11: Q <= D;               // Parallel load
+                default: Q <= Q;             // Hold
+            endcase
+        end
+    end
+endmodule
