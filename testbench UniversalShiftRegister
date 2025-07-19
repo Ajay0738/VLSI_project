@@ -1,0 +1,53 @@
+module tb_UniversalShiftRegister;
+   reg clk;
+    reg rst;
+    reg SI;
+    reg [7:0] D;
+    reg [1:0] S;
+    wire [7:0] Q;
+
+    // Instantiate the UniversalShiftRegister module
+    UniversalShiftRegister uut (
+        .clk(clk),
+        .rst(rst),
+        .SI(SI),
+        .D(D),
+        .S(S),
+        .Q(Q)
+    );
+
+    // Clock generation
+    always #5 clk = ~clk;  // Clock with 10 ns period
+
+    initial begin
+        // Initialize signals
+        clk = 0;
+        rst = 0;
+        SI = 0;
+        D = 8'b00000000;
+        S = 2'b00;
+// Test case 1: Reset the register
+        rst = 1;
+        #10;
+        rst = 0;
+         // Test case 2: Parallel load data into the register
+        D = 8'b10101010;
+        S = 2'b11; // Parallel load
+        #10;
+// Test case 3: Shift left with SI = 1
+        S = 2'b01; // Shift left
+        SI = 1;
+        #10;
+  // Test case 4: Shift right with SI = 1
+        S = 2'b10; // Shift right
+        SI = 1;
+        #10;
+
+        // Test case 5: Hold the value (no change)
+        S = 2'b00; // Hold
+        #10;
+
+        // End simulation
+        $finish;
+    end
+endmodule
